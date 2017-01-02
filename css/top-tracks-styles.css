@@ -86,8 +86,14 @@ li {
   height: 200px; }
 
 footer {
-  height: 200px;
-  background-color: black; }
+  height: 50px;
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center; }
+
+footer p {
+  margin-left: 20px; }
 
 /*
 *{

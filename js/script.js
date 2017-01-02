@@ -7,6 +7,7 @@ var $closeX = $('<div id="close-x">x</div>');
 var $overlayShowing = false; 
 
 
+
 /**************************************************
 this ajax function runs through spotify json top 
 tracks to get the info needed
@@ -42,6 +43,7 @@ $(document).ready(function(){
   $.getJSON(spotify,displayPhotos);
 });
 
+
 /***************************************************
 Preparing these templates to append to the lightbox div 
 **************************************/
@@ -63,7 +65,7 @@ $("#lightbox").append($songInfo);
 $("#lightbox").append($leftArrow);
 $("#lightbox").append($rightArrow);
 
-$("main").on("click", ".link", function () { 
+$("main").on("click", ".link", function (event) { 
         event.preventDefault();
         $currentImage = $(this);
         $overlay.hide().slideDown("slow");
@@ -132,6 +134,64 @@ function loadImage() {
             this.currentTime = 0;
             this.play(); 
         }); 
+}
+
+function loadImageResize() {
+        var $currentImageLocation = $currentImage.children("a").attr("href");
+        $image.attr("src",$currentImageLocation);
+        if( $(window).width() < 480){
+        $image.fadeOut(1800);
+        $(".lightbox-image")
+            .delay(100)
+            .queue(function(){
+            $(this).css({
+            "width": "120px",
+            "height": "120px",
+            "top": "-150px",
+            "left": "65px", });
+            $(this).dequeue();
+          });
+         $image.fadeIn(2500);}
+        if( $(window).width() >= 480 && $(window).width() < 700){
+        $image.fadeOut(1800);
+        $(".lightbox-image")
+            .delay(100)
+            .queue(function(){
+            $(this).css({
+            "width": "120px",
+            "height": "120px",
+            "top": "16.625%",
+            "left": "120%", });
+            $(this).dequeue();
+          });
+        $image.fadeIn(2500);}
+        if( $(window).width() >= 700 && $(window).width() < 1024){
+        $image.fadeOut(1800);
+        $(".lightbox-image")
+            .delay(100)
+            .queue(function(){
+            $(this).css({
+            "width": "120px",
+            "height": "120px",
+            "top": "-150px",
+            "left": "90px", });
+            $(this).dequeue();
+          });
+        $image.fadeIn(2500);}
+        if( $(window).width() >= 1024){
+        $image.fadeOut(1800);
+        $(".lightbox-image")
+            .delay(100)
+            .queue(function(){
+            $(this).css({
+            "width": "300px",
+            "height": "300px",
+            "top": "0",
+            "left": "0", });
+            $(this).dequeue();
+          });
+        $image.fadeIn(2500);}
+
 }
 
 
@@ -212,6 +272,7 @@ $("#close-x").on("click", function(){
 });
 
 
+
 /****************************************
 keyboard events for traversing the dom
 **************************************/
@@ -278,7 +339,20 @@ window.onkeydown = function(e) {
     }
 };
 
+/****************************************
+Browser window resize event 
+**************************************/
 
+var resizeId;
+$(window).resize(function() {
+    clearTimeout(resizeId);
+    resizeId = setTimeout(doneResizing, 500);
+});
+ 
+ 
+function doneResizing(){
+    loadImageResize(); 
+}
 
 function nextTrack(){
     $currentImage = $currentImage.next();
